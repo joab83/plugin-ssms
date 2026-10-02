@@ -2,13 +2,15 @@
 
 ## Contexto
 
-El usuario quiere una extensión propia para SQL Server Management Studio 22.6.0 (y posteriores) con tres funcionalidades de productividad que hoy requieren pasos manuales repetitivos:
+El usuario quiere una extensión propia para SQL Server Management Studio 22.6.0 (y posteriores) con seis funcionalidades de productividad que hoy requieren pasos manuales repetitivos:
 
 1. **Quick Connections**: un combo en la barra de herramientas para reconectar la ventana de query activa a un servidor/base de datos definidos en un archivo de configuración.
 2. **Grid → script SELECT**: tomar el resultado visible de una consulta y dejar en el portapapeles un script autocontenido que reproduce esos datos al pegarlo y ejecutarlo.
-3. **Generar ALTER / Generar CREATE**: al seleccionar el nombre de un objeto en el editor, ofrecer en el menú contextual la generación del script correspondiente.
+3. **Generar ALTER / Generar CREATE**: al seleccionar el nombre de un objeto en el editor, generar el script correspondiente desde el menú **Quick Tools** (los menús contextuales de SSMS no fusionan grupos de terceros, ver M3/M5).
+4. **Copiar resultado como XML Spreadsheet**: copiar la selección del grid al portapapeles en formato SpreadsheetML, que Excel pega con tipos y precisión preservados (M4).
+5. **Auto Replacement**: expandir un token corto escrito en el editor (ej. `cm`) en un snippet SQL configurado por el usuario en `%APPDATA%\SsmsQuickTools\autoreplacement.xml` al presionar Enter. Es la única función que intercepta el tecleo del editor (M6).
+6. **About**: ítem del menú **Quick Tools** que muestra versión de build, fecha de compilación y autor en un `MessageBox`; versión y fecha se generan en build (M5).
 
-El directorio de trabajo (`C:\Users\jobla\Desktop\ClaudeCode\plugin-ssms`) está vacío: es un proyecto desde cero.
 
 ## Viabilidad — resumen
 
@@ -18,6 +20,7 @@ Advertencias que deben quedar claras antes de empezar:
 
 - Microsoft **no da soporte oficial** a extensiones de terceros en SSMS 21+. Funciona, pero cualquier feedback a Microsoft será cerrado. Una actualización de SSMS puede romper la extensión.
 - Las funcionalidades 1 y 3 usan APIs internas de SSMS (`SQLEditors.dll`, `SqlWorkbench.Interfaces.dll`) documentadas solo parcialmente y a través de referencias directas a los DLL instalados.
+- La funcionalidad 5 (Auto Replacement) no usa APIs internas de SSMS ni MEF: intercepta `VSStd2K.RETURN` con `IVsTextView.AddCommandFilter` (COM legacy del shell VS). Es la más invasiva —toca el tecleo del editor— pero su riesgo de ruptura es bajo; si el filtro deja de engancharse, queda el comando manual "Expandir token" (`Ctrl+K, Ctrl+5`). La funcionalidad 6 (About) no tiene dependencias de SSMS.
 - La funcionalidad 2, con el enfoque elegido (**leer el grid por reflection**), depende de tipos internos no documentados (`Microsoft.SqlServer.Management.UI.Grid.GridControl`, `IGridStorage`). Es la parte más frágil del proyecto y la que más probablemente se rompa entre versiones. Se mitiga aislándola tras una interfaz con un fallback por portapapeles (TSV).
 - El grid solo expone los valores **como texto**, no los tipos SQL. Los tipos del script generado se **infieren** por heurística sobre el texto. Aceptable para pegar y ejecutar; no es fiel al esquema original.
 
@@ -77,6 +80,7 @@ plugin-ssms/
       GridReader.cs                 // reflection sobre GridControl  (aislado)
       ClipboardGridReader.cs        // fallback TSV
       IResultSetReader.cs           // interfaz común: columnas + filas de string
+      TextViewEditor.cs             // helpers IVsTextView (leer/reemplazar/caret) para Auto Replacement
     Features/
       QuickConnect/
         ConnectionCatalog.cs        // carga/watch del archivo de configuración
@@ -88,6 +92,19 @@ plugin-ssms/
         ObjectNameParser.cs         // parseo de [db].[schema].[obj] desde el texto seleccionado
         ObjectScripter.cs           // SMO / OBJECT_DEFINITION
         ScriptObjectCommands.cs
+      CopyXmlSpreadsheet/
+        XmlSpreadsheetBuilder.cs    // SpreadsheetML (lógica pura)
+        ClipboardDataObject.cs      // IDataObject COM propio
+      AutoReplacement/
+        AutoReplacementCatalog.cs   // carga/watch de autoreplacement.xml
+        TokenScanner.cs             // token pegado al cursor
+        SqlContextScanner.cs        // léxico T-SQL: no expandir en cadenas/comentarios
+        AutoReplacementExpander.cs  // CursorPositionMarker / SelectReplacement
+        AutoReplacementCommandFilter.cs // IOleCommandTarget sobre VSStd2K.RETURN
+        AutoReplacementService.cs   // engancha el filtro a cada vista
+        ExpandTokenCommand.cs       // comando manual, Ctrl+K, Ctrl+5
+      About/
+        AboutCommand.cs             // MessageBox con BuildInfo.g.cs (generado en build)
   README.md
 ```
 
