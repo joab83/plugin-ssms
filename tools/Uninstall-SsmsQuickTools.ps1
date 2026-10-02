@@ -61,7 +61,44 @@ if (-not $VsixInstaller) {
 }
 Write-Host "VSIXInstaller: $VsixInstaller"
 
+# Carpetas de extension instaladas cuyo manifest contiene el Id del VSIX.
+# El nombre de carpeta (hash) no es estable entre versiones de SSMS, por eso se busca por Id.
+function Find-ExtensionFolders {
+    $extensionsRoot = Join-Path $env:LOCALAPPDATA 'Microsoft\SSMS'
+    if (-not (Test-Path -LiteralPath $extensionsRoot)) { return @() }
+    $manifests = Get-ChildItem -Path $extensionsRoot -Filter 'extension.vsixmanifest' -Recurse -Depth 3 -File -ErrorAction SilentlyContinue
+    @($manifests |
+        Where-Object {
+            # Manifest ilegible (archivo bloqueado): se asume que es la extension, para no dar falso "desinstalada".
+            try { Select-String -LiteralPath $_.FullName -Pattern $VsixId -SimpleMatch -Quiet }
+            catch { $true }
+        } |
+        ForEach-Object { $_.DirectoryName })
+}
+
+$FoldersBefore = Find-ExtensionFolders
+
 Write-Host "Desinstalando $VsixId ..."
 $proc = Start-Process -FilePath $VsixInstaller -ArgumentList '/quiet', "/uninstall:$VsixId" -Wait -PassThru
 $InstallerExitCode = $proc.ExitCode
 Write-Host "VSIXInstaller termino con codigo $InstallerExitCode"
+
+# Fallback: si VSIXInstaller fallo o dejo restos, borrar las carpetas a mano.
+$Leftovers = Find-ExtensionFolders
+foreach ($folder in $Leftovers) {
+    Write-Host "Resto de la extension, borrando: $folder" -ForegroundColor Yellow
+    try { Remove-Item -LiteralPath $folder -Recurse -Force }
+    catch { Write-Host "No se pudo borrar ${folder}: $($_.Exception.Message)" -ForegroundColor Red }
+}
+
+if (@(Find-ExtensionFolders).Count -gt 0) {
+    Write-Host 'La extension sigue presente tras desinstalar y limpiar.' -ForegroundColor Red
+    exit 3
+}
+
+if ($FoldersBefore.Count -eq 0 -and $InstallerExitCode -ne 0) {
+    Write-Host 'La extension no estaba instalada. Nada que desinstalar.'
+} else {
+    Write-Host 'Extension desinstalada. Los datos de %APPDATA%\SsmsQuickTools se conservaron.'
+}
+exit 0
