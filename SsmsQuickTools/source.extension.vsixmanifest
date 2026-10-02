@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="SsmsQuickTools.a1c9e6a2-6b7a-4a3e-9b1d-7e6f2f4a9c10" Version="0.2.10" Language="en-US" Publisher="joab83" />
+    <Identity Id="SsmsQuickTools.a1c9e6a2-6b7a-4a3e-9b1d-7e6f2f4a9c10" Version="0.2.11" Language="en-US" Publisher="joab83" />
     <DisplayName>SSMS Quick Tools</DisplayName>
     <Description xml:space="preserve">Quick Connect, generacion de script de datos desde el grid de resultados, generacion de ALTER/CREATE para objetos y Auto Replacement (expansion de tokens con Enter), para SQL Server Management Studio 22.6 en adelante.</Description>
     <MoreInfo>https://github.com/joab83/plugin-ssms</MoreInfo>
