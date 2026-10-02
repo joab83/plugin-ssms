@@ -41,6 +41,37 @@ Ver detalle en `docs/PLAN.md`.
 
 Doble clic en el `.vsix` generado, o Extensions → Manage Extensions en SSMS.
 
+## Desinstalar
+
+Cerrar SSMS y ejecutar `Uninstall-SsmsQuickTools.ps1`. El build lo copia junto al `.vsix`
+(`SsmsQuickTools\bin\Release\net48\`); el original está en `tools\`.
+
+```
+powershell -ExecutionPolicy Bypass -File Uninstall-SsmsQuickTools.ps1
+```
+
+El script busca `VSIXInstaller.exe` de SSMS 22 (con `vswhere` y, si no, en la ruta estándar) y
+desinstala la extensión. Si `VSIXInstaller` falla o deja restos, borra las carpetas de la extensión
+bajo `%LocalAppData%\Microsoft\SSMS\<version>\Extensions\`. Si SSMS está instalado en otra ubicación,
+indicar su raíz (la carpeta que contiene `Common7\IDE`):
+
+```
+powershell -ExecutionPolicy Bypass -File Uninstall-SsmsQuickTools.ps1 -SsmsPath "D:\SSMS22\Release"
+```
+
+Códigos de salida:
+
+| Código | Significado |
+| ------ | ----------- |
+| `0` | Desinstalada (o ya no estaba instalada) |
+| `1` | SSMS está en ejecución; no se modificó nada |
+| `2` | No se encontró `VSIXInstaller.exe` (usar `-SsmsPath`) |
+| `3` | La extensión sigue presente tras desinstalar y limpiar |
+
+Si SSMS se instaló para todos los usuarios, puede hacer falta ejecutar PowerShell como administrador.
+Los datos de usuario en `%APPDATA%\SsmsQuickTools\` (`connections.json`, `autoreplacement.xml`) nunca se
+borran; para eliminarlos, hacerlo a mano.
+
 ## Configurar Quick Connect
 
 Editar `%APPDATA%\SsmsQuickTools\connections.json` (se crea con un ejemplo si no existe al iniciar SSMS).
