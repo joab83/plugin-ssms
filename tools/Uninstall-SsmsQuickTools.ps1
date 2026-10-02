@@ -66,7 +66,10 @@ Write-Host "VSIXInstaller: $VsixInstaller"
 function Find-ExtensionFolders {
     $extensionsRoot = Join-Path $env:LOCALAPPDATA 'Microsoft\SSMS'
     if (-not (Test-Path -LiteralPath $extensionsRoot)) { return @() }
-    $manifests = Get-ChildItem -Path $extensionsRoot -Filter 'extension.vsixmanifest' -Recurse -Depth 3 -File -ErrorAction SilentlyContinue
+    # Se excluye el hive experimental (carpetas de version que terminan en "Exp", usado para depurar).
+    $manifests = Get-ChildItem -Path $extensionsRoot -Directory |
+        Where-Object { $_.Name -notlike '*Exp' } |
+        ForEach-Object { Get-ChildItem -Path $_.FullName -Filter 'extension.vsixmanifest' -Recurse -Depth 3 -File -ErrorAction SilentlyContinue }
     @($manifests |
         Where-Object {
             # Manifest ilegible (archivo bloqueado): se asume que es la extension, para no dar falso "desinstalada".

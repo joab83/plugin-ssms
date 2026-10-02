@@ -53,16 +53,16 @@ Codigos de salida: `0` = desinstalada (o ya no estaba instalada), `1` = SSMS en 
 
 ## Criterios de aceptacion
 
-- [ ] `tools/Uninstall-SsmsQuickTools.ps1` existe y `msbuild SsmsQuickTools.sln -t:Rebuild -p:Configuration=Release` lo copia a `SsmsQuickTools\bin\Release\net48\` junto al `.vsix`.
-- [ ] Con SSMS abierto, el script no modifica nada, imprime un mensaje pidiendo cerrar SSMS y sale con codigo `1`.
-- [ ] Con SSMS cerrado y la extension instalada, el script la desinstala y sale con codigo `0`; al abrir SSMS el menu Quick Tools ya no aparece.
-- [ ] Tras la desinstalacion, no queda ninguna carpeta bajo `%LocalAppData%\Microsoft\SSMS\*\Extensions\` cuyo manifest contenga el `Id` del VSIX.
-- [ ] Con una instalacion rota (carpeta de la extension presente pero `VSIXInstaller` falla), el fallback borra la carpeta y el script sale con `0`.
-- [ ] Con la extension ya desinstalada, el script sale con `0` e informa que no habia nada que desinstalar.
-- [ ] `%APPDATA%\SsmsQuickTools\connections.json` y `autoreplacement.xml` existen sin cambios (mismo contenido) despues de correr el script.
-- [ ] Con `-SsmsPath` apuntando a una ruta valida distinta, el script usa ese `VSIXInstaller.exe`; con una ruta invalida sale con codigo `2`.
-- [ ] `README.md` documenta el comando y los codigos de salida.
-- [ ] `dotnet test SsmsQuickTools.Tests` sigue pasando sin cambios.
+- [x] `tools/Uninstall-SsmsQuickTools.ps1` existe y `msbuild SsmsQuickTools.sln -t:Rebuild -p:Configuration=Release` lo copia a `SsmsQuickTools\bin\Release\net48\` junto al `.vsix`.
+- [x] Con SSMS abierto, el script no modifica nada, imprime un mensaje pidiendo cerrar SSMS y sale con codigo `1`.
+- [x] Con SSMS cerrado y la extension instalada, el script la desinstala y sale con codigo `0`; al abrir SSMS el menu Quick Tools ya no aparece.
+- [x] Tras la desinstalacion, no queda ninguna carpeta bajo `%LocalAppData%\Microsoft\SSMS\*\Extensions\` cuyo manifest contenga el `Id` del VSIX.
+- [x] Con una instalacion rota (carpeta de la extension presente pero `VSIXInstaller` falla), el fallback borra la carpeta y el script sale con `0`.
+- [x] Con la extension ya desinstalada, el script sale con `0` e informa que no habia nada que desinstalar.
+- [x] `%APPDATA%\SsmsQuickTools\connections.json` y `autoreplacement.xml` existen sin cambios (mismo contenido) despues de correr el script.
+- [x] Con `-SsmsPath` apuntando a una ruta valida distinta, el script usa ese `VSIXInstaller.exe`; con una ruta invalida sale con codigo `2`.
+- [x] `README.md` documenta el comando y los codigos de salida.
+- [x] `dotnet test SsmsQuickTools.Tests` sigue pasando sin cambios.
 
 ## Decisiones tomadas y descartadas
 
