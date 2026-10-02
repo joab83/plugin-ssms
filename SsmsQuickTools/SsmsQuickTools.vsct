@@ -159,6 +159,8 @@
           <ButtonText>About</ButtonText>
           <MenuText>About</MenuText>
           <ToolTipText>Muestra la version y fecha de build de SsmsQuickTools</ToolTipText>
+        </Strings>
+      </Button>
 
       <!-- Locate in Object Explorer (spec 01): ubica y selecciona en el arbol de Object
            Explorer el objeto seleccionado o bajo el cursor en la query activa. -->
@@ -223,7 +225,7 @@
       <IDSymbol name="cmdidCopyXmlSpreadsheetCommand" value="0x0201" />
       <IDSymbol name="cmdidExpandTokenCommand" value="0x0202" />
       <IDSymbol name="cmdidAboutCommand" value="0x0203" />
-      <IDSymbol name="cmdidLocateObjectCommand" value="0x0203" />
+      <IDSymbol name="cmdidLocateObjectCommand" value="0x0204" />
     </GuidSymbol>
 
     <GuidSymbol name="guidEditorContextCmdSet" value="{d71b3e2f-929e-4f15-9652-e299c6a4b288}">
