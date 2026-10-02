@@ -1,6 +1,6 @@
 # 02 - Desinstalador del VSIX (script PowerShell)
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** ninguno
 **Fecha:** 2026-10-01
 
