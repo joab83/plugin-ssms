@@ -556,14 +556,24 @@ Todo se verifica contra SSMS real; no hay pruebas automatizadas de la capa de UI
   **Re-verificado** (2026-09-18, v0.2.1, formato `INSERT INTO XXXXXXXX`): reinstalado el VSIX contra
   SSMS 22.6 real, `Ctrl+Shift+D` sobre un grid pega el nuevo formato correctamente; probado también con
   más de 1000 filas — confirma la partición en varios statements `INSERT` (sin `UNION ALL`).
-- **M3**: probar sobre una tabla, una vista, un procedimiento y una función; con nombre completo y con nombre simple; y con un objeto inexistente (debe avisar sin excepción).
+  **Checklist manual** (2026-10-01, v0.2.9/0.2.10, `docs/manual-tests.sql`): fallback sin "Include column
+  headers" — **OK**: sin aviso de fallback y con las 3 filas completas (el caso "pierde la primera fila"
+  ya no se reproduce). **FALLA — selección de columnas no contiguas**: seleccionar varias columnas
+  (Ctrl+click) y usar el comando copia solo la última columna seleccionada (caso M2.1).
+- **M1** (Quick Connect): **OK** (2026-10-01, checklist `docs/manual-tests.sql` M1.1-M1.6).
+- **M3**: **OK** (2026-10-01, checklist `docs/manual-tests.sql`: tabla/vista/procedimiento/función, nombre
+  simple, con schema y completo, objeto inexistente). Pendiente original ya cubierto:
+  probar sobre una tabla, una vista, un procedimiento y una función; con nombre completo y con nombre simple; y con un objeto inexistente (debe avisar sin excepción).
 - **M4**: **Hecho, parcial** (2026-09-11, contra SSMS 22.6, v0.1.10): el comando aparece y ejecuta desde
   Tools y desde `Ctrl+Shift+X` sin errores; pegado en Excel confirmado con encabezado en negrita y tipos
   preservados (bloqueante resuelto, ver nota de estado al inicio del milestone). El menú contextual del
-  grid de resultados no lo expone (descartado, ver "Invocación"). Pendiente todavía: ejecutar el
-  checklist completo de tipos mixtos (`bigint` mayor a 2^53, `decimal(38,10)`, `money`, `nvarchar`
-  numérico con ceros a la izquierda, `datetime2(7)`, `date`, `time`, `bit`, `NULL`, `uniqueidentifier`,
-  string con `<`, `&` y un tab), selección parcial de columnas, y confirmar el fallback TSV en Notepad.
+  grid de resultados no lo expone (descartado, ver "Invocación").
+  **Checklist manual** (2026-10-01, v0.2.9/0.2.10, `docs/manual-tests.sql`):
+  - Tipos mixtos completos (`bigint` mayor a 2^53, `decimal(38,10)`, `money`, ceros a la izquierda,
+    `datetime2(7)`, `date`, `time`, `bit`, `NULL`, `uniqueidentifier`, string con `<`, `&` y tab) — **OK**.
+  - Fallback de texto plano en Notepad — **OK**.
+  - **FALLA — selección parcial de columnas no contiguas**: con Ctrl+click sobre varios encabezados, el
+    comando copia solo la última columna seleccionada (caso M4.2).
 - Prueba de regresión de riesgo: reiniciar SSMS varias veces y confirmar que no se degrada el arranque ni aparecen errores en `%AppData%\Microsoft\SSMS\ActivityLog.xml` (arrancar con `Ssms.exe /log` para generarlo).
 - **M6 (Auto Replacement)**: **Hecho** (2026-09-15, contra SSMS 22.6.11806.211, v0.2.0): probado
   manualmente por el usuario tras reinstalar el VSIX y reiniciar SSMS por completo — funciona bien.
@@ -572,6 +582,20 @@ Todo se verifica contra SSMS real; no hay pruebas automatizadas de la capa de UI
   árbol ya tuvo alguna expansión previa (tibio); con el árbol totalmente colapsado en frío
   (conexión de Object Explorer nunca tocada), sigue fallando — ver Milestone 7 para el detalle y
   la hipótesis pendiente de confirmar.
+
+## Pendientes abiertos (2026-10-01)
+
+1. **Bug: selección de múltiples columnas copia solo la última** (M2 y M4, `GridReader`). Con Ctrl+click
+   sobre varios encabezados, `GetDataObject(hasSelection, true)` solo devuelve la última columna. Investigar
+   cómo `SelectedCells` representa selecciones múltiples (¿un rango por click?) y armar el dato a mano si
+   hace falta. Probar también rango contiguo con Shift+click, que no se llegó a registrar.
+2. **M7 caso frío** (ver Milestone 7).
+3. ~~`source.extension.vsixmanifest` con dos elementos `<Identity>`~~ **Resuelto** (2026-10-01). Causa: el
+   merge `19d9dd0` (`main` → `mejoras_menu`) combinó dos bumps de versión de líneas adyacentes
+   (0.2.10 y 0.2.9) sin conflicto y dejó ambas. `BumpVsixVersion` no tuvo la culpa. Se quitó la línea
+   0.2.9; queda `Version="0.2.10"`.
+4. Atajos citados arriba en Verificación como `Ctrl+Shift+D` / `Ctrl+Shift+X` están desactualizados; los
+   actuales son `Ctrl+K, Ctrl+1` y `Ctrl+K, Ctrl+4`.
 
 ## Unit tests
 
