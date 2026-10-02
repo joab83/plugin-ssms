@@ -60,3 +60,8 @@ if (-not $VsixInstaller) {
     exit 2
 }
 Write-Host "VSIXInstaller: $VsixInstaller"
+
+Write-Host "Desinstalando $VsixId ..."
+$proc = Start-Process -FilePath $VsixInstaller -ArgumentList '/quiet', "/uninstall:$VsixId" -Wait -PassThru
+$InstallerExitCode = $proc.ExitCode
+Write-Host "VSIXInstaller termino con codigo $InstallerExitCode"
