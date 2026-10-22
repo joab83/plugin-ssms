@@ -21,6 +21,7 @@
     <!-- Compila directamente los archivos de logica pura, sin referenciar el proyecto VSIX
          completo (que arrastra ensamblados de SSMS solo disponibles en la maquina de dev). -->
     <Compile Include="..\SsmsQuickTools\Features\ScriptData\ValuesScriptBuilder.cs" Link="ScriptData\ValuesScriptBuilder.cs" />
+    <Compile Include="..\SsmsQuickTools\Features\CommaList\CommaListBuilder.cs" Link="CommaList\CommaListBuilder.cs" />
     <Compile Include="..\SsmsQuickTools\Features\ScriptObject\ObjectNameParser.cs" Link="ScriptObject\ObjectNameParser.cs" />
     <Compile Include="..\SsmsQuickTools\Features\ScriptObject\CreateAlterRewriter.cs" Link="ScriptObject\CreateAlterRewriter.cs" />
     <Compile Include="..\SsmsQuickTools\Ssms\TsvParser.cs" Link="Ssms\TsvParser.cs" />

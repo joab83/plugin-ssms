@@ -175,6 +175,19 @@
           <ToolTipText>Locates and selects the object under the cursor in the Object Explorer tree</ToolTipText>
         </Strings>
       </Button>
+
+      <!-- Copy Selection as Comma List: una linea "a, b, c" por columna seleccionada, lista para
+           pegar en un IN (...). Mismo patron que ScriptData / CopyXmlSpreadsheet. -->
+      <Button guid="guidQuickToolsCmdSet" id="cmdidCopyCommaListCommand" priority="0x0120" type="Button">
+        <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Copy Selection as Comma List</ButtonText>
+          <MenuText>Copy Selection as Comma List</MenuText>
+          <ToolTipText>Copies the selected result grid cells to the clipboard as a comma-separated list, one line per column</ToolTipText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Combos>
@@ -202,6 +215,7 @@
     <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidCopyXmlSpreadsheetCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="4" mod2="Control" />
     <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidExpandTokenCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="5" mod2="Control" />
     <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidLocateObjectCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="6" mod2="Control" />
+    <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidCopyCommaListCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="7" mod2="Control" />
   </KeyBindings>
 
   <Symbols>
@@ -226,6 +240,7 @@
       <IDSymbol name="cmdidExpandTokenCommand" value="0x0202" />
       <IDSymbol name="cmdidAboutCommand" value="0x0203" />
       <IDSymbol name="cmdidLocateObjectCommand" value="0x0204" />
+      <IDSymbol name="cmdidCopyCommaListCommand" value="0x0205" />
     </GuidSymbol>
 
     <GuidSymbol name="guidEditorContextCmdSet" value="{d71b3e2f-929e-4f15-9652-e299c6a4b288}">

@@ -172,7 +172,7 @@ namespace SsmsQuickTools.Features.ScriptData
             return InferredSqlType.NVarChar;
         }
 
-        private static string FormatLiteral(string value, InferredSqlType type)
+        public static string FormatLiteral(string value, InferredSqlType type)
         {
             if (IsNullText(value))
             {
@@ -195,7 +195,7 @@ namespace SsmsQuickTools.Features.ScriptData
             }
         }
 
-        private static bool IsNullText(string value)
+        public static bool IsNullText(string value)
         {
             return value == null || value == NullLiteral;
         }

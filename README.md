@@ -9,6 +9,7 @@ Extensión VSIX para SQL Server Management Studio **22.6.0 en adelante**.
 3. **Generar CREATE / Generar ALTER**: comandos en el menú **Quick Tools** (barra principal) que scriptean el objeto bajo el cursor o la selección.
 4. **Copiar selección como XML Spreadsheet**: copia la selección del grid de resultados al portapapeles en formato XML Spreadsheet (Excel), preservando tipo y precisión.
 5. **Auto Replacement**: escribir un token corto y presionar Enter en el editor de query lo reemplaza por un snippet SQL configurado en `%APPDATA%\SsmsQuickTools\autoreplacement.xml`.
+6. **Copiar selección como lista separada por coma** (`Ctrl+K, Ctrl+7`): copia las celdas seleccionadas del grid como una línea `a, b, c` por columna (números sin comillas, texto `N'...'`; omite NULL y duplicados), lista para pegar en un `IN (...)`.
 
 Ver el plan de diseño completo en `docs/PLAN.md`.
 

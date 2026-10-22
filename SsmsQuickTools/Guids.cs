@@ -51,5 +51,7 @@ namespace SsmsQuickTools
         public const uint AboutCommand = 0x0203;
         // Comando "Locate in Object Explorer" (menu Quick Tools > Query)
         public const uint LocateObjectCommand = 0x0204;
+        // Comando "Copiar seleccion como lista separada por coma" (menu Quick Tools > Results Grid)
+        public const uint CopyCommaListCommand = 0x0205;
     }
 }
