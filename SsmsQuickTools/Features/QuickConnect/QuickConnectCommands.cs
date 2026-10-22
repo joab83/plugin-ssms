@@ -145,8 +145,14 @@ namespace SsmsQuickTools.Features.QuickConnect
 
         private static IDbConnection OpenConnection(UIConnectionInfo connectionInfo, string database)
         {
-            var dbConnection = new Microsoft.Data.SqlClient.SqlConnection(
-                SsmsHost.BuildConnectionString(connectionInfo, database));
+            // Microsoft.Data.SqlClient usa Encrypt=Mandatory por defecto, y SSMS lo muestra asi en la
+            // ventana; se fuerza Optional (como el dialogo de conexion de SSMS).
+            var builder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(
+                SsmsHost.BuildConnectionString(connectionInfo, database))
+            {
+                Encrypt = Microsoft.Data.SqlClient.SqlConnectionEncryptOption.Optional,
+            };
+            var dbConnection = new Microsoft.Data.SqlClient.SqlConnection(builder.ConnectionString);
             try
             {
                 dbConnection.Open();
