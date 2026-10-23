@@ -16,6 +16,12 @@ namespace SsmsQuickTools.Features.QuickConnect
     /// </summary>
     public sealed class QuickConnectCommands
     {
+        // Seguridad de las conexiones de Quick Connect: sin cifrado obligatorio y validando el
+        // certificado del servidor (equivale a los defaults "Optional"/sin marcar del dialogo de SSMS).
+        private static readonly Microsoft.Data.SqlClient.SqlConnectionEncryptOption EncryptOption =
+            Microsoft.Data.SqlClient.SqlConnectionEncryptOption.Optional;
+        private const bool TrustServerCertificate = false;
+
         private readonly AsyncPackage _package;
         private readonly OleMenuCommandService _commandService;
         private readonly ConnectionCatalog _catalog;
@@ -103,6 +109,11 @@ namespace SsmsQuickTools.Features.QuickConnect
                 ServerType = new Guid("8c91a03d-f9b4-46c0-a305-b5dcc79ff907"),
             };
             connectionInfo.AdvancedOptions["DATABASE"] = connection.Database;
+            // SSMS arma sus propias conexiones (scripting, etc.) a partir de estas claves
+            // (UIConnectionInfoUtil en ConnectionDlg.dll); sin ellas cae a Mandatory + sin confiar
+            // en el certificado y falla con "cadena de certificacion ... no se confia".
+            connectionInfo.AdvancedOptions["ENCRYPT_CONNECTION"] = EncryptOption.ToString();
+            connectionInfo.AdvancedOptions["TRUST_SERVER_CERTIFICATE"] = TrustServerCertificate.ToString();
 
             // Reconecta in-place la ventana activa (mismo servidor: solo cambia de base; servidor
             // distinto: desconecta y reconecta). OpenConnection solo se invoca cuando SsmsHost
@@ -146,11 +157,13 @@ namespace SsmsQuickTools.Features.QuickConnect
         private static IDbConnection OpenConnection(UIConnectionInfo connectionInfo, string database)
         {
             // Microsoft.Data.SqlClient usa Encrypt=Mandatory por defecto, y SSMS lo muestra asi en la
-            // ventana; se fuerza Optional (como el dialogo de conexion de SSMS).
+            // ventana; se aplican los mismos valores que ConnectToSelection dejo en connectionInfo
+            // (Optional, validando el certificado), a diferencia de BuildConnectionString que confia siempre.
             var builder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(
                 SsmsHost.BuildConnectionString(connectionInfo, database))
             {
-                Encrypt = Microsoft.Data.SqlClient.SqlConnectionEncryptOption.Optional,
+                Encrypt = EncryptOption,
+                TrustServerCertificate = TrustServerCertificate,
             };
             var dbConnection = new Microsoft.Data.SqlClient.SqlConnection(builder.ConnectionString);
             try
