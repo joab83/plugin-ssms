@@ -14,6 +14,18 @@ namespace SsmsQuickTools.Ssms
     /// </summary>
     internal static class TextViewEditor
     {
+        public static bool HasSelection(IVsTextView view)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (ErrorHandler.Failed(view.GetSelection(out var anchorLine, out var anchorCol, out var endLine, out var endCol)))
+            {
+                return false;
+            }
+
+            return anchorLine != endLine || anchorCol != endCol;
+        }
+
         public static bool TryGetLineTextToCaret(IVsTextView view, out int caretLine, out int caretColumn, out string linePrefix)
         {
             ThreadHelper.ThrowIfNotOnUIThread();

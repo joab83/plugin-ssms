@@ -8,7 +8,7 @@ namespace SsmsQuickTools.Features.AutoReplacement
 {
     /// <summary>
     /// Comando manual "Expandir token" en el menu Quick Tools, con atajo de teclado. Plan C
-    /// (docs/PLAN.md:309-313): entrega la funcion aunque el filtro de comandos sobre Enter no se
+    /// (docs/PLAN.md:309-313): entrega la funcion aunque el filtro de comandos sobre Enter/Tab no se
     /// enganche en alguna version futura de SSMS. Ejecuta la misma logica que
     /// AutoReplacementCommandFilter, sobre la vista activa en lugar de "su" vista.
     /// </summary>

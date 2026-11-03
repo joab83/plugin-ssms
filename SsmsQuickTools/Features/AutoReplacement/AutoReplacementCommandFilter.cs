@@ -9,9 +9,9 @@ using SsmsQuickTools.Ssms;
 namespace SsmsQuickTools.Features.AutoReplacement
 {
     /// <summary>
-    /// Filtro de comandos por ventana de query: intercepta Enter (VSStd2K.RETURN) y, si la
-    /// palabra pegada al cursor es un token configurado fuera de una cadena/comentario, lo
-    /// expande en lugar de insertar el salto de linea. Cualquier otro caso, o cualquier error,
+    /// Filtro de comandos por ventana de query: intercepta Enter (VSStd2K.RETURN) y Tab
+    /// (VSStd2K.TAB) y, si la palabra pegada al cursor es un token configurado fuera de una
+    /// cadena/comentario, lo expande en lugar de insertar el salto de linea o el tab. Cualquier otro caso, o cualquier error,
     /// delega siempre al siguiente target de la cadena.
     /// </summary>
     internal sealed class AutoReplacementCommandFilter : IOleCommandTarget
@@ -56,18 +56,22 @@ namespace SsmsQuickTools.Features.AutoReplacement
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN)
+            var isReturn = pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN;
+            var isTab = pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.TAB;
+
+            if (isReturn || isTab)
             {
                 try
                 {
-                    if (TryExpand())
+                    // Tab con seleccion indenta el bloque: no se convierte en expansion.
+                    if (!(isTab && TextViewEditor.HasSelection(_view)) && TryExpand())
                     {
                         return VSConstants.S_OK;
                     }
                 }
                 catch
                 {
-                    // Cualquier fallo aca no debe romper el Enter del editor: se delega igual.
+                    // Cualquier fallo aca no debe romper el Enter/Tab del editor: se delega igual.
                 }
             }
 

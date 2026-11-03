@@ -137,7 +137,7 @@
       </Button>
 
       <!-- Auto Replacement (Milestone 6, docs/PLAN.md): expande el token pegado al cursor segun
-           autoreplacement.xml. Se entrega tambien como filtro de comandos sobre Enter en el
+           autoreplacement.xml. Se entrega tambien como filtro de comandos sobre Enter/Tab en el
            editor; este comando de menu+atajo es el plan C que garantiza que la funcion siga
            siendo usable si ese enganche deja de funcionar en una version futura de SSMS. -->
       <Button guid="guidQuickToolsCmdSet" id="cmdidExpandTokenCommand" priority="0x0120" type="Button">

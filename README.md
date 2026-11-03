@@ -8,7 +8,7 @@ Extensión VSIX para SQL Server Management Studio **22.6.0 en adelante**.
 2. **Grid → Script**: copia el resultado de una consulta al portapapeles como uno o más statements `INSERT INTO XXXXXXXX SELECT * FROM (VALUES ...) v (...)`, listos para pegar sobre la tabla destino real (reemplazando `XXXXXXXX`) y ejecutar.
 3. **Generar CREATE / Generar ALTER**: comandos en el menú **Quick Tools** (barra principal) que scriptean el objeto bajo el cursor o la selección.
 4. **Copiar selección como XML Spreadsheet**: copia la selección del grid de resultados al portapapeles en formato XML Spreadsheet (Excel), preservando tipo y precisión.
-5. **Auto Replacement**: escribir un token corto y presionar Enter en el editor de query lo reemplaza por un snippet SQL configurado en `%APPDATA%\SsmsQuickTools\autoreplacement.xml`.
+5. **Auto Replacement**: escribir un token corto y presionar Enter o Tab en el editor de query lo reemplaza por un snippet SQL configurado en `%APPDATA%\SsmsQuickTools\autoreplacement.xml`.
 6. **Copiar selección como lista separada por coma** (`Ctrl+K, Ctrl+7`): copia las celdas seleccionadas del grid como una línea `a, b, c` por columna (números sin comillas, texto `N'...'`; omite NULL y duplicados), lista para pegar en un `IN (...)`.
 
 Ver el plan de diseño completo en `docs/PLAN.md`.
@@ -93,7 +93,7 @@ Solo autenticación de Windows; el archivo no admite usuario/password.
 
 Editar `%APPDATA%\SsmsQuickTools\autoreplacement.xml` (se crea con un ejemplo si no existe al
 iniciar SSMS). Cada `<AutoReplacement>` admite uno o varios `<Token>` (alias) que expanden al mismo
-texto al presionar Enter en el editor de query:
+texto al presionar Enter o Tab en el editor de query:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -117,5 +117,5 @@ ORDER BY id_mensaje DESC</Replacement>
 `CursorPositionMarker` indica el carácter que marca dónde queda el cursor tras expandir (se borra del
 texto); si no aparece en `Replacement`, el cursor queda al final. `SelectReplacement=true` selecciona
 todo el texto insertado en lugar de posicionar el cursor. No expande dentro de cadenas ni comentarios
-SQL. Si el filtro de Enter no se engancha en alguna instalación, la misma expansión está disponible
+SQL. Si el filtro de Enter/Tab no se engancha en alguna instalación, la misma expansión está disponible
 como comando manual "Expandir token" (Quick Tools, `Ctrl+K, Ctrl+5`).
