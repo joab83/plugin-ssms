@@ -13,3 +13,8 @@ TestResults/
 
 ## Ensamblados de SSMS (propietarios, no redistribuir): cada dev los copia de su instalación
 lib/ssms22.6/*.dll
+
+## Claude
+CLAUDE.md
+specs/
+lib/
