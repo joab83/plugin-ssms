@@ -66,6 +66,11 @@
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenu" />
       </Group>
 
+      <!-- Grupo fusionado en el popup real del grid de resultados (click derecho). -->
+      <Group guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" priority="0x0F00">
+        <Parent guid="guidSqlEditorGroup" id="IDM_SQLWB_SQLRESGRID_CONTEXT" />
+      </Group>
+
       <!-- Grupo propio para About, separado de los submenus Query/Results Grid por un divisor. -->
       <Group guid="guidQuickToolsCmdSet" id="AboutMenuGroup" priority="0x0900">
         <Parent guid="guidQuickToolsCmdSet" id="QuickToolsMenu" />
@@ -121,10 +126,10 @@
 
       <!-- Copiar seleccion del grid como XML Spreadsheet (Milestone 4, docs/PLAN.md). Se
            intento tambien fusionar en el menu contextual del grid de resultados
-           (IDM_SQLWB_SQLRESGRID_CONTEXT, GUID_SQLEditorCommandSet); descartado tras
-           verificacion empirica (2026-09-10) contra SSMS 22.6, mismo resultado que M3 con el
-           editor: SSMS no fusiona grupos de terceros en ese menu tampoco. Queda en Quick Tools +
-           atajo, igual que ScriptData y Generar CREATE/ALTER. -->
+           (IDM_SQLWB_SQLRESGRID_CONTEXT) con GUID_SQLEditorCommandSet y no funciono; el IL de
+           SQLEditors.dll muestra que SSMS muestra ese popup con GUID_SQLEditorGroup
+           ({33F13AC3-...}, CommonUtils.DisplayPopupMenu), asi que se reintenta con ese guid via
+           CommandPlacements (ver ResultsGridContextGroup). Tambien sigue en Quick Tools + atajo. -->
       <Button guid="guidQuickToolsCmdSet" id="cmdidCopyXmlSpreadsheetCommand" priority="0x0100" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
         <Icon guid="ImageCatalogGuid" id="Copy" />
@@ -205,6 +210,18 @@
 
   </Commands>
 
+  <CommandPlacements>
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidScriptDataCommand" priority="0x0110">
+      <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidCopyXmlSpreadsheetCommand" priority="0x0120">
+      <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidCopyCommaListCommand" priority="0x0130">
+      <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
+    </CommandPlacement>
+  </CommandPlacements>
+
   <!-- Acordes Ctrl+K, Ctrl+<n> en lugar de teclas unicas Ctrl+Shift+<letra>: ese espacio de una
        sola tecla esta tomado por comandos de VS/SSMS y es el que suelen tomar otras extensiones
        de terceros; el prefijo Ctrl+K con digitos esta prácticamente libre. -->
@@ -231,6 +248,7 @@
       <IDSymbol name="QueryMenuGroup" value="0x1111" />
       <IDSymbol name="ResultsGridMenu" value="0x1120" />
       <IDSymbol name="ResultsGridMenuGroup" value="0x1121" />
+      <IDSymbol name="ResultsGridContextGroup" value="0x1122" />
 
       <IDSymbol name="cmdidConnectionCombo" value="0x0100" />
       <IDSymbol name="cmdidConnectionComboGetList" value="0x0101" />
@@ -241,6 +259,11 @@
       <IDSymbol name="cmdidAboutCommand" value="0x0203" />
       <IDSymbol name="cmdidLocateObjectCommand" value="0x0204" />
       <IDSymbol name="cmdidCopyCommaListCommand" value="0x0205" />
+    </GuidSymbol>
+
+    <!-- GUID_SQLEditorGroup de SQLEditors.dll; 0x70 = IDM_SQLWB_SQLRESGRID_CONTEXT. -->
+    <GuidSymbol name="guidSqlEditorGroup" value="{33F13AC3-80BB-4ecb-85BC-225435603A5E}">
+      <IDSymbol name="IDM_SQLWB_SQLRESGRID_CONTEXT" value="0x0070" />
     </GuidSymbol>
 
     <GuidSymbol name="guidEditorContextCmdSet" value="{d71b3e2f-929e-4f15-9652-e299c6a4b288}">
