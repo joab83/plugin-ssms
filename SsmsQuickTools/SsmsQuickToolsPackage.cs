@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using SsmsQuickTools.Features.About;
 using SsmsQuickTools.Features.AutoReplacement;
 using SsmsQuickTools.Features.CommaList;
+using SsmsQuickTools.Features.CopyHeaders;
 using SsmsQuickTools.Features.CopyXmlSpreadsheet;
 using SsmsQuickTools.Features.LocateObject;
 using SsmsQuickTools.Features.QuickConnect;
@@ -46,6 +47,8 @@ namespace SsmsQuickTools
             new CopyXmlSpreadsheetCommand(this, commandService).Register();
             new LocateObjectCommand(this, commandService).Register();
             new CopyCommaListCommand(this, commandService).Register();
+            new CopyAllHeadersCommand(this, commandService).Register();
+            new CopySelectedHeadersCommand(this, commandService).Register();
 
             var autoReplacementCatalog = new AutoReplacementCatalog();
             new AutoReplacementService(autoReplacementCatalog);
