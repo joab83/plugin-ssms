@@ -193,6 +193,29 @@
           <ToolTipText>Copies the selected result grid cells to the clipboard as a comma-separated list, one line per column</ToolTipText>
         </Strings>
       </Button>
+
+      <!-- Copy All Headers / Copy Selected Headers (spec 03): nombres de columna como
+           "[A], [B], [C]". Mismo patron que Comma List: menu Quick Tools + click derecho del grid. -->
+      <Button guid="guidQuickToolsCmdSet" id="cmdidCopyAllHeadersCommand" priority="0x0130" type="Button">
+        <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Copy All Headers</ButtonText>
+          <MenuText>Copy All Headers</MenuText>
+          <ToolTipText>Copies all result grid column names to the clipboard as [A], [B], [C]</ToolTipText>
+        </Strings>
+      </Button>
+      <Button guid="guidQuickToolsCmdSet" id="cmdidCopySelectedHeadersCommand" priority="0x0140" type="Button">
+        <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Copy Selected Headers</ButtonText>
+          <MenuText>Copy Selected Headers</MenuText>
+          <ToolTipText>Copies the column names of the selected result grid cells to the clipboard as [A], [B], [C]</ToolTipText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Combos>
@@ -218,6 +241,12 @@
       <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
     </CommandPlacement>
     <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidCopyCommaListCommand" priority="0x0130">
+      <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidCopyAllHeadersCommand" priority="0x0140">
+      <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidCopySelectedHeadersCommand" priority="0x0150">
       <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
     </CommandPlacement>
   </CommandPlacements>
@@ -259,6 +288,8 @@
       <IDSymbol name="cmdidAboutCommand" value="0x0203" />
       <IDSymbol name="cmdidLocateObjectCommand" value="0x0204" />
       <IDSymbol name="cmdidCopyCommaListCommand" value="0x0205" />
+      <IDSymbol name="cmdidCopyAllHeadersCommand" value="0x0206" />
+      <IDSymbol name="cmdidCopySelectedHeadersCommand" value="0x0207" />
     </GuidSymbol>
 
     <!-- GUID_SQLEditorGroup de SQLEditors.dll; 0x70 = IDM_SQLWB_SQLRESGRID_CONTEXT. -->
