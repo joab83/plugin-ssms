@@ -18,6 +18,13 @@ namespace SsmsQuickTools.Ssms
     public sealed class GridReader : IResultSetReader
     {
         public ResultSetData TryRead(out string failureReason)
+            => TryRead(false, out failureReason);
+
+        /// <summary>
+        /// Con <paramref name="ignoreSelection"/> true lee el grid completo aunque haya celdas
+        /// seleccionadas (y <see cref="ResultSetData.HasSelection"/> queda en false).
+        /// </summary>
+        public ResultSetData TryRead(bool ignoreSelection, out string failureReason)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -65,7 +72,7 @@ namespace SsmsQuickTools.Ssms
 
             try
             {
-                var hasSelection = grid.SelectedCells != null && grid.SelectedCells.Count > 0;
+                var hasSelection = !ignoreSelection && grid.SelectedCells != null && grid.SelectedCells.Count > 0;
                 var dataObject = grid.GetDataObject(hasSelection, true);
                 var text = dataObject?.GetData(DataFormats.UnicodeText) as string
                            ?? dataObject?.GetData(DataFormats.Text) as string;
