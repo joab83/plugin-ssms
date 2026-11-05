@@ -32,8 +32,8 @@ namespace SsmsQuickTools.Features.CopyHeaders
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var data = new GridReader().TryRead(true, out var reason);
-            if (data == null)
+            var columns = new GridReader().TryReadAllColumnNames(out var reason);
+            if (columns == null)
             {
                 MessageBox.Show(reason, "SSMS Quick Tools", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -41,7 +41,7 @@ namespace SsmsQuickTools.Features.CopyHeaders
 
             try
             {
-                Clipboard.SetText(HeaderListBuilder.Build(data.Columns), TextDataFormat.UnicodeText);
+                Clipboard.SetText(HeaderListBuilder.Build(columns), TextDataFormat.UnicodeText);
             }
             catch (Exception ex)
             {

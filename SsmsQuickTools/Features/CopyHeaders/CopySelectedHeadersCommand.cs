@@ -33,17 +33,13 @@ namespace SsmsQuickTools.Features.CopyHeaders
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var data = new GridReader().TryRead(out var reason);
-            if (data == null)
-            {
-                MessageBox.Show(reason, "SSMS Quick Tools", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!data.HasSelection)
+            var columns = new GridReader().TryReadSelectedColumnNames(out var hasSelection, out var reason);
+            if (columns == null)
             {
                 MessageBox.Show(
-                    "Selecciona celdas en el grid de resultados antes de usar este comando.",
+                    hasSelection || reason != null
+                        ? reason ?? "No se pudo leer la seleccion del grid."
+                        : "Selecciona celdas en el grid de resultados antes de usar este comando.",
                     "SSMS Quick Tools",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -52,7 +48,7 @@ namespace SsmsQuickTools.Features.CopyHeaders
 
             try
             {
-                Clipboard.SetText(HeaderListBuilder.Build(data.Columns), TextDataFormat.UnicodeText);
+                Clipboard.SetText(HeaderListBuilder.Build(columns), TextDataFormat.UnicodeText);
             }
             catch (Exception ex)
             {
