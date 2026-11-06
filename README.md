@@ -99,18 +99,31 @@ texto al presionar Enter o Tab en el editor de query:
 <?xml version="1.0" encoding="utf-8"?>
 <AutoReplacements>
 
-  <AutoReplacement>
-    <Token>cm</Token>
-    <Token>colamen</Token>
-    <CaseSensitive>false</CaseSensitive>
-    <Name>Cola Mensajes</Name>
-    <Replacement>SELECT TOP 200 * FROM dbo.cola_mensajes_n3 WITH(NOLOCK) WHERE 1=1 #
--- AND id_linea = 11111111
-ORDER BY id_mensaje DESC</Replacement>
-    <SelectReplacement>false</SelectReplacement>
-    <CursorPositionMarker>#</CursorPositionMarker>
-  </AutoReplacement>
-
+	<AutoReplacement>
+		<Token>cm</Token>
+		<CaseSensitive>false</CaseSensitive>
+		<Name>Cola Mensajes</Name>
+		<Replacement>
+SELECT TOP 200 * FROM dbo.cola_mensajes WITH(NOLOCK) WHERE 1=1 
+-- AND id_linea = 11111111 
+-- AND fecha_creacion > #'XXXXXX' 
+-- AND id_tipo_mensaje IN ('XX') 
+-- AND estado_n3 IN (3) 
+ORDER BY id_mensaje DESC 
+		</Replacement>
+		<SelectReplacement>false</SelectReplacement>
+		<CursorPositionMarker>#</CursorPositionMarker>
+	</AutoReplacement>
+	<AutoReplacement>
+		<Token>sl</Token>
+		<CaseSensitive>false</CaseSensitive>
+		<Name>Select top</Name>
+		<Replacement>
+SELECT TOP 200 * FROM # 
+		</Replacement>
+		<SelectReplacement>false</SelectReplacement>
+		<CursorPositionMarker>#</CursorPositionMarker>
+	</AutoReplacement>
 </AutoReplacements>
 ```
 
