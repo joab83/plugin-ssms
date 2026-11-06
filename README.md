@@ -81,8 +81,8 @@ Lista plana de conexiones con nombre, cada una con su servidor y base:
 ```json
 {
   "connections": [
-    { "name": "DEV01.Figuritas", "server": "LENOVOJOSE\\DEV01", "database": "Figuritas" },
-    { "name": "DEV01.ClinicaTurnos", "server": "LENOVOJOSE\\DEV01", "database": "ClinicaTurnos" }
+    { "name": "DEV01.BASE_DATOS1", "server": "SERVIDOR1\\DEV01", "database": "BASE_DATOS1" },
+    { "name": "DEV01.BASE_DATOS2", "server": "SERVIDOR2\\DEV01", "database": "BASE_DATOS2" }
   ]
 }
 ```
