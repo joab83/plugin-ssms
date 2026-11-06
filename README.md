@@ -11,7 +11,7 @@ Extensión VSIX para SQL Server Management Studio **22.6.0 en adelante**.
 2. **Grid → Script** (`Ctrl+K, Ctrl+1`): copia el resultado de una consulta al portapapeles como uno o más statements `INSERT INTO XXXXXXXX SELECT * FROM (VALUES ...) v (...)`, listos para pegar sobre la tabla destino real (reemplazando `XXXXXXXX`) y ejecutar. Si no puede leer el grid directamente, usa el portapapeles como respaldo (requiere la opción de SSMS "incluir encabezados de columna al copiar").
 3. **Generar CREATE** (`Ctrl+K, Ctrl+2`) **/ Generar ALTER** (`Ctrl+K, Ctrl+3`): comandos en el menú **Quick Tools** (barra principal) que scriptean el objeto bajo el cursor o la selección. ALTER no está disponible para tablas.
 4. **Copiar selección como XML Spreadsheet** (`Ctrl+K, Ctrl+4`): copia la selección del grid de resultados al portapapeles en formato XML Spreadsheet (Excel), preservando tipo y precisión.
-5. **Auto Replacement**: escribir un token corto y presionar Enter o Tab en el editor de query lo reemplaza por un snippet SQL configurado en `%APPDATA%\SsmsQuickTools\autoreplacement.xml`. También disponible como comando manual (`Ctrl+K, Ctrl+5`).
+5. **Auto Replacement**: escribir un token corto y presionar Enter, Tab o Espacio en el editor de query lo reemplaza por un snippet SQL configurado en `%APPDATA%\SsmsQuickTools\autoreplacement.xml`.
 6. **Copiar selección como lista separada por coma** (`Ctrl+K, Ctrl+7`): copia las celdas seleccionadas del grid como una línea `a, b, c` por columna (números sin comillas, texto `N'...'`; omite NULL y duplicados), lista para pegar en un `IN (...)`.
 7. **Copiar encabezados (todos / seleccionados)**: copia los nombres de columna del grid como `[A], [B], [C]` (un `]` en el nombre se duplica). "All" copia todas las columnas; "Selected" solo las que tienen celdas seleccionadas (avisa si no hay selección). Sin atajo de teclado.
 8. **Locate in Object Explorer** (`Ctrl+K, Ctrl+6`) — *experimental*: ubica y selecciona en el árbol de Object Explorer el objeto bajo el cursor o la selección de la query activa. Puede no encontrar el objeto.
@@ -20,7 +20,7 @@ Extensión VSIX para SQL Server Management Studio **22.6.0 en adelante**.
 ## Dónde están los comandos
 
 - **Menú Quick Tools** (barra principal de SSMS):
-  - Submenú **Query**: Script Object as CREATE, Script Object as ALTER, Autoreplacement, Locate in Object Explorer.
+  - Submenú **Query**: Script Object as CREATE, Script Object as ALTER, Locate in Object Explorer.
   - Submenú **Results Grid**: Copy Selection as Script SELECT, Copy Selection as SpreadSheet (Excel), Copy Selection as Comma List, Copy All Headers, Copy Selected Headers.
   - About.
 - **Click derecho en el grid de resultados**: los comandos de Results Grid (Script SELECT, SpreadSheet, Comma List, All/Selected Headers).
@@ -34,7 +34,6 @@ El menú contextual del editor de query no admite comandos de terceros, por eso 
 | `Ctrl+K, Ctrl+2` | Generar CREATE |
 | `Ctrl+K, Ctrl+3` | Generar ALTER |
 | `Ctrl+K, Ctrl+4` | Copiar como XML Spreadsheet |
-| `Ctrl+K, Ctrl+5` | Expandir token (Auto Replacement manual) |
 | `Ctrl+K, Ctrl+6` | Locate in Object Explorer (experimental) |
 | `Ctrl+K, Ctrl+7` | Copiar selección como lista separada por coma |
 
@@ -197,5 +196,4 @@ SELECT TOP 200 * FROM #
 `CursorPositionMarker` indica el carácter que marca dónde queda el cursor tras expandir (se borra del
 texto); si no aparece en `Replacement`, el cursor queda al final. `SelectReplacement=true` selecciona
 todo el texto insertado en lugar de posicionar el cursor. No expande dentro de cadenas ni comentarios
-SQL. Si el filtro de Enter/Tab no se engancha en alguna instalación, la misma expansión está disponible
-como comando manual "Expandir token" (Quick Tools, `Ctrl+K, Ctrl+5`).
+SQL. Se dispara solo con Enter, Tab o Espacio (la tecla se consume al expandir); no hay comando de menú.

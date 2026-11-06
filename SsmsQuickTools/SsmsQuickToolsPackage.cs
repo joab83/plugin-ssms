@@ -55,7 +55,6 @@ namespace SsmsQuickTools
 
             var autoReplacementCatalog = new AutoReplacementCatalog();
             new AutoReplacementService(autoReplacementCatalog);
-            new ExpandTokenCommand(this, commandService, autoReplacementCatalog).Register();
 
             new AboutCommand(this, commandService).Register();
         }

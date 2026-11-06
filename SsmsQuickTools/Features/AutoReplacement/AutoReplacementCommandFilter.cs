@@ -9,10 +9,11 @@ using SsmsQuickTools.Ssms;
 namespace SsmsQuickTools.Features.AutoReplacement
 {
     /// <summary>
-    /// Filtro de comandos por ventana de query: intercepta Enter (VSStd2K.RETURN) y Tab
-    /// (VSStd2K.TAB) y, si la palabra pegada al cursor es un token configurado fuera de una
-    /// cadena/comentario, lo expande en lugar de insertar el salto de linea o el tab. Cualquier otro caso, o cualquier error,
-    /// delega siempre al siguiente target de la cadena.
+    /// Filtro de comandos por ventana de query: intercepta Enter (VSStd2K.RETURN), Tab
+    /// (VSStd2K.TAB) y Espacio (VSStd2K.TYPECHAR con ' ') y, si la palabra pegada al cursor es un
+    /// token configurado fuera de una cadena/comentario, lo expande en lugar de insertar el salto
+    /// de linea, el tab o el espacio. Cualquier otro caso, o cualquier error, delega siempre al
+    /// siguiente target de la cadena.
     /// </summary>
     internal sealed class AutoReplacementCommandFilter : IOleCommandTarget
     {
@@ -58,8 +59,9 @@ namespace SsmsQuickTools.Features.AutoReplacement
 
             var isReturn = pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN;
             var isTab = pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.TAB;
+            var isSpace = pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.TYPECHAR && IsSpaceChar(pvaIn);
 
-            if (isReturn || isTab)
+            if (isReturn || isTab || isSpace)
             {
                 try
                 {
@@ -77,6 +79,24 @@ namespace SsmsQuickTools.Features.AutoReplacement
 
             return _next?.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut)
                 ?? (int)Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_NOTSUPPORTED;
+        }
+
+        // TYPECHAR trae el caracter tipeado como VARIANT (ushort) en pvaIn.
+        private static bool IsSpaceChar(IntPtr pvaIn)
+        {
+            if (pvaIn == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            try
+            {
+                return Marshal.GetObjectForNativeVariant(pvaIn) is ushort ch && ch == ' ';
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool TryExpand()

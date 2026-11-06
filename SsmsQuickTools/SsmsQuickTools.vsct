@@ -46,6 +46,15 @@
           <CommandName>ResultsGrid</CommandName>
         </Strings>
       </Menu>
+
+      <!-- Submenu "Quick Tools" dentro del click derecho del editor: agrupa los comandos de Query. -->
+      <Menu guid="guidQuickToolsCmdSet" id="QueryEditorContextMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidQuickToolsCmdSet" id="QueryEditorContextGroup" />
+        <Strings>
+          <ButtonText>Quick Tools</ButtonText>
+          <CommandName>QuickToolsContext</CommandName>
+        </Strings>
+      </Menu>
     </Menus>
 
     <Groups>
@@ -71,6 +80,17 @@
         <Parent guid="guidSqlEditorGroup" id="IDM_SQLWB_SQLRESGRID_CONTEXT" />
       </Group>
 
+      <!-- Grupo fusionado en el popup real del editor de query (click derecho). Mismo guid que el
+           grid ({33F13AC3-...}); el id del menu lo da ScriptEditorContextMenuID en SQLEditors.dll:
+           0x50 editor normal, 0x40D documento de objeto SQL / debug. -->
+      <Group guid="guidQuickToolsCmdSet" id="QueryEditorContextGroup" priority="0x0F00">
+        <Parent guid="guidSqlEditorGroup" id="IDM_SQLWB_SQLEDITOR_CONTEXT" />
+      </Group>
+
+      <Group guid="guidQuickToolsCmdSet" id="QueryEditorContextMenuGroup" priority="0x0000">
+        <Parent guid="guidQuickToolsCmdSet" id="QueryEditorContextMenu" />
+      </Group>
+
       <!-- Grupo propio para About, separado de los submenus Query/Results Grid por un divisor. -->
       <Group guid="guidQuickToolsCmdSet" id="AboutMenuGroup" priority="0x0900">
         <Parent guid="guidQuickToolsCmdSet" id="QuickToolsMenu" />
@@ -90,10 +110,10 @@
         </Strings>
       </Button>
 
-      <!-- Generar CREATE / Generar ALTER: se intento primero como menu contextual del editor de
-           codigo, pero el editor de query de SSMS arma su popup a mano y no fusiona grupos de
-           terceros pese a aparecer como "customizable" en Personalizar (confirmado empiricamente
-           contra SSMS 22.6). Quedan en Quick Tools + atajo, igual que ScriptData (ver docs/PLAN.md M3). -->
+      <!-- Generar CREATE / Generar ALTER: viven en Quick Tools + atajo y tambien en el click
+           derecho del editor (QueryEditorContextGroup, via CommandPlacements). Los intentos
+           previos con guidSHLMainMenu/GUID_SQLEditorCommandSet fallaron por usar el guid
+           equivocado; el popup real usa GUID_SQLEditorGroup (ver docs/PLAN.md M5). -->
       <Button guid="guidEditorContextCmdSet" id="cmdidGenerateCreateCommand" priority="0x0100" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="QueryMenuGroup" />
         <Icon guid="ImageCatalogGuid" id="Add" />
@@ -141,20 +161,8 @@
         </Strings>
       </Button>
 
-      <!-- Auto Replacement (Milestone 6, docs/PLAN.md): expande el token pegado al cursor segun
-           autoreplacement.xml. Se entrega tambien como filtro de comandos sobre Enter/Tab en el
-           editor; este comando de menu+atajo es el plan C que garantiza que la funcion siga
-           siendo usable si ese enganche deja de funcionar en una version futura de SSMS. -->
-      <Button guid="guidQuickToolsCmdSet" id="cmdidExpandTokenCommand" priority="0x0120" type="Button">
-        <Parent guid="guidQuickToolsCmdSet" id="QueryMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Snippet" />
-        <CommandFlag>IconIsMoniker</CommandFlag>
-        <Strings>
-          <ButtonText>Autoreplacement</ButtonText>
-          <MenuText>Autoreplacement</MenuText>
-          <ToolTipText>Expands the token glued to the cursor according to autoreplacement.xml</ToolTipText>
-        </Strings>
-      </Button>
+      <!-- Auto Replacement no tiene comando de menu: solo se dispara con Enter/Tab/Espacio via
+           AutoReplacementCommandFilter. -->
       <!-- About: version y fecha de build, para saber que .vsix esta instalado durante pruebas. -->
       <Button guid="guidQuickToolsCmdSet" id="cmdidAboutCommand" priority="0x0000" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="AboutMenuGroup" />
@@ -234,6 +242,19 @@
   </Commands>
 
   <CommandPlacements>
+    <!-- Mismo grupo del editor tambien en el popup de documento de objeto SQL (Modify). -->
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="QueryEditorContextGroup" priority="0x0F00">
+      <Parent guid="guidSqlEditorGroup" id="IDM_SQLWB_SQLOBJECT_CONTEXT" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidEditorContextCmdSet" id="cmdidGenerateCreateCommand" priority="0x0100">
+      <Parent guid="guidQuickToolsCmdSet" id="QueryEditorContextMenuGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidEditorContextCmdSet" id="cmdidGenerateAlterCommand" priority="0x0110">
+      <Parent guid="guidQuickToolsCmdSet" id="QueryEditorContextMenuGroup" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidLocateObjectCommand" priority="0x0120">
+      <Parent guid="guidQuickToolsCmdSet" id="QueryEditorContextMenuGroup" />
+    </CommandPlacement>
     <CommandPlacement guid="guidQuickToolsCmdSet" id="cmdidScriptDataCommand" priority="0x0110">
       <Parent guid="guidQuickToolsCmdSet" id="ResultsGridContextGroup" />
     </CommandPlacement>
@@ -259,7 +280,6 @@
     <KeyBinding guid="guidEditorContextCmdSet" id="cmdidGenerateCreateCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="2" mod2="Control" />
     <KeyBinding guid="guidEditorContextCmdSet" id="cmdidGenerateAlterCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="3" mod2="Control" />
     <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidCopyXmlSpreadsheetCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="4" mod2="Control" />
-    <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidExpandTokenCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="5" mod2="Control" />
     <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidLocateObjectCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="6" mod2="Control" />
     <KeyBinding guid="guidQuickToolsCmdSet" id="cmdidCopyCommaListCommand" editor="guidVSStd97" key1="K" mod1="Control" key2="7" mod2="Control" />
   </KeyBindings>
@@ -278,13 +298,15 @@
       <IDSymbol name="ResultsGridMenu" value="0x1120" />
       <IDSymbol name="ResultsGridMenuGroup" value="0x1121" />
       <IDSymbol name="ResultsGridContextGroup" value="0x1122" />
+      <IDSymbol name="QueryEditorContextGroup" value="0x1123" />
+      <IDSymbol name="QueryEditorContextMenu" value="0x1130" />
+      <IDSymbol name="QueryEditorContextMenuGroup" value="0x1131" />
 
       <IDSymbol name="cmdidConnectionCombo" value="0x0100" />
       <IDSymbol name="cmdidConnectionComboGetList" value="0x0101" />
 
       <IDSymbol name="cmdidScriptDataCommand" value="0x0200" />
       <IDSymbol name="cmdidCopyXmlSpreadsheetCommand" value="0x0201" />
-      <IDSymbol name="cmdidExpandTokenCommand" value="0x0202" />
       <IDSymbol name="cmdidAboutCommand" value="0x0203" />
       <IDSymbol name="cmdidLocateObjectCommand" value="0x0204" />
       <IDSymbol name="cmdidCopyCommaListCommand" value="0x0205" />
@@ -292,9 +314,12 @@
       <IDSymbol name="cmdidCopySelectedHeadersCommand" value="0x0207" />
     </GuidSymbol>
 
-    <!-- GUID_SQLEditorGroup de SQLEditors.dll; 0x70 = IDM_SQLWB_SQLRESGRID_CONTEXT. -->
+    <!-- GUID_SQLEditorGroup de SQLEditors.dll; 0x70 = IDM_SQLWB_SQLRESGRID_CONTEXT,
+         0x50 / 0x40D = menu contextual del editor (SqlScriptEditorControl.ScriptEditorContextMenuID). -->
     <GuidSymbol name="guidSqlEditorGroup" value="{33F13AC3-80BB-4ecb-85BC-225435603A5E}">
       <IDSymbol name="IDM_SQLWB_SQLRESGRID_CONTEXT" value="0x0070" />
+      <IDSymbol name="IDM_SQLWB_SQLEDITOR_CONTEXT" value="0x0050" />
+      <IDSymbol name="IDM_SQLWB_SQLOBJECT_CONTEXT" value="0x040D" />
     </GuidSymbol>
 
     <GuidSymbol name="guidEditorContextCmdSet" value="{d71b3e2f-929e-4f15-9652-e299c6a4b288}">

@@ -44,9 +44,6 @@ namespace SsmsQuickTools
         public const uint GenerateCreateCommand = 0x0300;
         public const uint GenerateAlterCommand = 0x0301;
 
-        // Comando "Expandir token" (menu Quick Tools) - plan C de Auto Replacement
-        public const uint ExpandTokenCommand = 0x0202;
-
         // Comando "About" (menu Quick Tools)
         public const uint AboutCommand = 0x0203;
         // Comando "Locate in Object Explorer" (menu Quick Tools > Query)
