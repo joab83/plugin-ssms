@@ -9,7 +9,7 @@ Extensión VSIX para SQL Server Management Studio **22.6.0 en adelante**.
 
 1. **Quick Connect**: combo "Quick Connections" en toolbar para reconectar la ventana de query activa a una conexión (servidor + base) definida por nombre en un archivo de configuración local.
 2. **Grid → Script** (`Ctrl+K, Ctrl+1`): copia el resultado de una consulta al portapapeles como uno o más statements `INSERT INTO XXXXXXXX SELECT * FROM (VALUES ...) v (...)`, listos para pegar sobre la tabla destino real (reemplazando `XXXXXXXX`) y ejecutar. Si no puede leer el grid directamente, usa el portapapeles como respaldo (requiere la opción de SSMS "incluir encabezados de columna al copiar").
-3. **Generar CREATE** (`Ctrl+K, Ctrl+2`) **/ Generar ALTER** (`Ctrl+K, Ctrl+3`): comandos en el menú **Quick Tools** (barra principal) que scriptean el objeto bajo el cursor o la selección. ALTER no está disponible para tablas.
+3. **Generar CREATE** (`Ctrl+K, Ctrl+2`) **/ Generar ALTER** (`Ctrl+K, Ctrl+3`): comandos en el menú **Quick Tools** (barra principal) y en el click derecho del editor de query que scriptean el objeto bajo el cursor o la selección. ALTER no está disponible para tablas.
 4. **Copiar selección como XML Spreadsheet** (`Ctrl+K, Ctrl+4`): copia la selección del grid de resultados al portapapeles en formato XML Spreadsheet (Excel), preservando tipo y precisión.
 5. **Auto Replacement**: escribir un token corto y presionar Enter, Tab o Espacio en el editor de query lo reemplaza por un snippet SQL configurado en `%APPDATA%\SsmsQuickTools\autoreplacement.xml`.
 6. **Copiar selección como lista separada por coma** (`Ctrl+K, Ctrl+7`): copia las celdas seleccionadas del grid como una línea `a, b, c` por columna (números sin comillas, texto `N'...'`; omite NULL y duplicados), lista para pegar en un `IN (...)`.
@@ -23,10 +23,11 @@ Extensión VSIX para SQL Server Management Studio **22.6.0 en adelante**.
   - Submenú **Query**: Script Object as CREATE, Script Object as ALTER, Locate in Object Explorer.
   - Submenú **Results Grid**: Copy Selection as Script SELECT, Copy Selection as SpreadSheet (Excel), Copy Selection as Comma List, Copy All Headers, Copy Selected Headers.
   - About.
-- **Click derecho en el grid de resultados**: los comandos de Results Grid (Script SELECT, SpreadSheet, Comma List, All/Selected Headers).
+- **Click derecho en el editor de query**: submenú **Quick Tools** con Script Object as CREATE, Script Object as ALTER y Locate in Object Explorer. Aparece también al editar un objeto abierto con Modify.
+- **Click derecho en el grid de resultados**: los comandos de Results Grid (Script SELECT, SpreadSheet, Comma List, All/Selected Headers), sueltos, cada uno con su propio icono.
 - **Toolbar "SSMS Quick Tools"**: combo Quick Connections.
 
-El menú contextual del editor de query no admite comandos de terceros, por eso los comandos de Query viven solo en el menú Quick Tools.
+Auto Replacement no tiene comando de menú ni atajo: solo se dispara con Enter, Tab o Espacio.
 
 | Atajo | Comando |
 | ----- | ------- |
