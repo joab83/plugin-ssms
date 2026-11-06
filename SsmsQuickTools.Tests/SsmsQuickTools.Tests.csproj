@@ -25,6 +25,7 @@
     <Compile Include="..\SsmsQuickTools\Features\CopyHeaders\HeaderListBuilder.cs" Link="CopyHeaders\HeaderListBuilder.cs" />
     <Compile Include="..\SsmsQuickTools\Features\ScriptObject\ObjectNameParser.cs" Link="ScriptObject\ObjectNameParser.cs" />
     <Compile Include="..\SsmsQuickTools\Features\ScriptObject\CreateAlterRewriter.cs" Link="ScriptObject\CreateAlterRewriter.cs" />
+    <Compile Include="..\SsmsQuickTools\Features\TopLevelMenu\AllowedMenuList.cs" Link="TopLevelMenu\AllowedMenuList.cs" />
     <Compile Include="..\SsmsQuickTools\Ssms\TsvParser.cs" Link="Ssms\TsvParser.cs" />
     <Compile Include="..\SsmsQuickTools\Ssms\IResultSetReader.cs" Link="Ssms\IResultSetReader.cs" />
     <Compile Include="..\SsmsQuickTools\Features\CopyXmlSpreadsheet\XmlSpreadsheetBuilder.cs" Link="CopyXmlSpreadsheet\XmlSpreadsheetBuilder.cs" />

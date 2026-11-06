@@ -14,6 +14,7 @@ using SsmsQuickTools.Features.LocateObject;
 using SsmsQuickTools.Features.QuickConnect;
 using SsmsQuickTools.Features.ScriptData;
 using SsmsQuickTools.Features.ScriptObject;
+using SsmsQuickTools.Ssms;
 using Task = System.Threading.Tasks.Task;
 
 namespace SsmsQuickTools
@@ -31,6 +32,8 @@ namespace SsmsQuickTools
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            TopLevelMenuPromoter.EnsurePromoted(this);
 
             var commandService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService == null)

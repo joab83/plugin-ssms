@@ -26,7 +26,16 @@ namespace SsmsQuickTools.Features.QuickConnect
         private readonly OleMenuCommandService _commandService;
         private readonly ConnectionCatalog _catalog;
 
+        // Al abrir la lista, el MouseUp del mismo click puede caer sobre el item que queda bajo el
+        // cursor y confirmarlo antes de que el usuario elija. El shell pide la lista (GetList) al
+        // abrir el dropdown Y de nuevo, en el mismo instante, justo antes de entregar la seleccion
+        // (SET). Por eso se compara el penultimo pedido (apertura) con el ultimo (confirmacion):
+        // si pasaron menos de este tiempo, la seleccion fue accidental y se ignora.
+        private const int AccidentalSelectionWindowMs = 300;
+
         private string _selectedConnectionName;
+        private int _lastListTick;
+        private int _prevListTick;
 
         public QuickConnectCommands(AsyncPackage package, OleMenuCommandService commandService, ConnectionCatalog catalog)
         {
@@ -61,6 +70,12 @@ namespace SsmsQuickTools.Features.QuickConnect
 
             if (args.InValue is string newChoice)
             {
+                var openToCommitMs = unchecked(_lastListTick - _prevListTick);
+                if (openToCommitMs < AccidentalSelectionWindowMs)
+                {
+                    return;
+                }
+
                 var connection = _catalog.FindConnection(newChoice);
                 if (connection == null)
                 {
@@ -85,6 +100,8 @@ namespace SsmsQuickTools.Features.QuickConnect
                 return;
             }
 
+            _prevListTick = _lastListTick;
+            _lastListTick = Environment.TickCount;
             var names = _catalog.Connections.Select(c => c.Name).ToArray();
             Marshal.GetNativeVariantForObject(names, args.OutValue);
         }

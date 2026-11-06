@@ -81,7 +81,7 @@
     <Buttons>
       <Button guid="guidQuickToolsCmdSet" id="cmdidScriptDataCommand" priority="0x0110" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <Icon guid="ImageCatalogGuid" id="ModifyQueryInsertValues" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
           <ButtonText>Copy Selection as Script SELECT</ButtonText>
@@ -132,7 +132,7 @@
            CommandPlacements (ver ResultsGridContextGroup). Tambien sigue en Quick Tools + atajo. -->
       <Button guid="guidQuickToolsCmdSet" id="cmdidCopyXmlSpreadsheetCommand" priority="0x0100" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <Icon guid="ImageCatalogGuid" id="OfficeExcel2013" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
           <ButtonText>Copy Selection as SpreadSheet (Excel)</ButtonText>
@@ -185,7 +185,7 @@
            pegar en un IN (...). Mismo patron que ScriptData / CopyXmlSpreadsheet. -->
       <Button guid="guidQuickToolsCmdSet" id="cmdidCopyCommaListCommand" priority="0x0120" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <Icon guid="ImageCatalogGuid" id="Comma" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
           <ButtonText>Copy Selection as Comma List</ButtonText>
@@ -198,7 +198,7 @@
            "[A], [B], [C]". Mismo patron que Comma List: menu Quick Tools + click derecho del grid. -->
       <Button guid="guidQuickToolsCmdSet" id="cmdidCopyAllHeadersCommand" priority="0x0130" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <Icon guid="ImageCatalogGuid" id="TableHeader" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
           <ButtonText>Copy All Headers</ButtonText>
@@ -208,7 +208,7 @@
       </Button>
       <Button guid="guidQuickToolsCmdSet" id="cmdidCopySelectedHeadersCommand" priority="0x0140" type="Button">
         <Parent guid="guidQuickToolsCmdSet" id="ResultsGridMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Copy" />
+        <Icon guid="ImageCatalogGuid" id="SelectColumn" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
           <ButtonText>Copy Selected Headers</ButtonText>
